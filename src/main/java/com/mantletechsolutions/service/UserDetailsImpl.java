@@ -1,11 +1,15 @@
 package com.mantletechsolutions.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mantletechsolutions.jwt.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -35,6 +39,23 @@ public class UserDetailsImpl implements UserDetails {
         this.gender = gender;
         this.nationality = nationality;
         this.authorities = authorities;
+    }
+
+    public static UserDetailsImpl build(UserEntity user) {
+        List<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .collect(Collectors.toList());
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhone(),
+                user.getNationality(),
+                user.getDob(),
+                user.getGender(),
+                authorities);
     }
 
     @Override

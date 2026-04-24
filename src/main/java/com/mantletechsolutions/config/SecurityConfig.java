@@ -41,8 +41,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/v1/noauth/**").permitAll()
-                                .anyRequest().authenticated()
+                       req.requestMatchers("/api/v1/noauth/**").permitAll()
+                               
+                               .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
